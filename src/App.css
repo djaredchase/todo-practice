@@ -1,1 +1,37 @@
+.App {
+  background-color: gray;
+  height: 100%; /*CHECK THIS HEIGHT*/
+  padding: 10px 20px;
+}
 
+.my-heading {
+  display: flex;
+  align-items: center;
+}
+
+.todo-title {
+  margin-right: 15px;
+}
+
+.my-container {
+  /* background-color: aliceblue; */
+  display: flex;
+  justify-content: space-around;
+  height: 100vh; /*CHECK THIS HEIGHT*/
+}
+
+.planned-tasks {
+  width: 33%;
+}
+
+.in-progress-tasks {
+  width: 33%;
+}
+
+.completed-tasks {
+  width: 33%;
+}
+
+.task-title-input {
+  margin: 0 0 10px 5px;
+}
