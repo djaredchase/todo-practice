@@ -17,9 +17,10 @@ function App() {
     setShow(false)
     clearForm();
   };
-  const handleNewTask = (event) => {
+  const createNewTask = (event) => {
     event.preventDefault();
     const task = {
+      id: generateId(),
       title: newTaskTitle,
       description: newTaskDescription,
       status: 'planned'
@@ -28,10 +29,10 @@ function App() {
     setTasks(taskArray);
     handleClose();
   }
-  const handleNewTaskTitle = (event) => {
+  const handleTaskTitleChange = (event) => {
     setNewTaskTitle(event.target.value);
   }
-  const handleNewTaskDescription = (event) => {
+  const handleTaskDescriptionChange = (event) => {
     setNewTaskDescription(event.target.value);
   }
   const deleteTask = (index) => {
@@ -43,6 +44,25 @@ function App() {
     setNewTaskTitle('');
     setNewTaskDescription('');
   }
+  const handleDrop = (e, newStatus) => {
+    e.preventDefault();
+    // get the task info from dataTransfer object
+    // change the task status of the specific task in the tasks array
+    // receive the index of the dragged task
+    // edit the task at that index, set the state
+    const taskIndex = e.dataTransfer.getData('taskIndex');
+    const taskArray = [...tasks];
+    taskArray[taskIndex].status = newStatus;
+    setTasks(taskArray);
+    e.dataTransfer.clearData('taskIndex');
+  }
+  const generateId = () => {
+    // JUST ADDED THIS ID
+    // remove all uses of index and switch the functionality and your drag n drop will be fixed
+    const num = Math.floor(Math.random() * Math.random() * Date.now());
+    console.log('unique id', num);
+    return num;
+  }
 
   return (
     <div className="App">
@@ -51,7 +71,11 @@ function App() {
         <Button className='add-task-btn' onClick={handleShow}>Add task</Button>
       </div>
       <div className='my-container'>
-        <Card className='planned-tasks'>
+        <Card
+          className='tasks-container'
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handleDrop(e, 'planned')}
+        >
           <Card.Body>
             <Card.Title>Planned</Card.Title>
             <Card.Text>
@@ -71,7 +95,11 @@ function App() {
             </Card.Text>
           </Card.Body>
         </Card>
-        <Card className='in-progress-tasks'>
+        <Card
+          className='tasks-container'
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handleDrop(e, 'in progress')}
+        >
           <Card.Body>
             <Card.Title>In Progress</Card.Title>
             <Card.Text>
@@ -91,7 +119,11 @@ function App() {
             </Card.Text>
           </Card.Body>
         </Card>
-        <Card className='completed-tasks'>
+        <Card
+          className='tasks-container'
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handleDrop(e, 'completed')}
+        >
           <Card.Body>
             <Card.Title>Completed</Card.Title>
             <Card.Text>
@@ -114,7 +146,7 @@ function App() {
       </div>
 
       <Modal show={show} onHide={handleClose}>
-        <Form onSubmit={handleNewTask}>
+        <Form onSubmit={createNewTask}>
           <Modal.Header closeButton>
             <Modal.Title>New Task</Modal.Title>
           </Modal.Header>
@@ -125,7 +157,7 @@ function App() {
                 placeholder='Enter task title'
                 required
                 value={newTaskTitle}
-                onChange={handleNewTaskTitle}
+                onChange={handleTaskTitleChange}
               />
             </Form.Group>
             <Form.Group>
@@ -134,7 +166,7 @@ function App() {
                 as='textarea'
                 placeholder='Optionally include a description'
                 value={newTaskDescription}
-                onChange={handleNewTaskDescription}
+                onChange={handleTaskDescriptionChange}
               />
             </Form.Group>
           </Modal.Body>

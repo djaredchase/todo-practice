@@ -20,15 +20,7 @@
   height: 100vh; /*CHECK THIS HEIGHT*/
 }
 
-.planned-tasks {
-  width: 33%;
-}
-
-.in-progress-tasks {
-  width: 33%;
-}
-
-.completed-tasks {
+.tasks-container {
   width: 33%;
 }
 

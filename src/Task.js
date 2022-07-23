@@ -16,13 +16,22 @@ const Task = (props) => {
                 return 'secondary';
         }
     }
+    const handleDragStart = (e) => {
+        // set the task index in the dataTransfer object
+        e.dataTransfer.setData('taskIndex', index);
+    }
 
     const handleDelete = () => {
         deleteTask(index);
     }
 
     return (
-        <Card bg={setBackgroundColor(status)} text='white'>
+        <Card
+            bg={setBackgroundColor(status)}
+            text='white'
+            draggable
+            onDragStart={(e) => handleDragStart(e)}
+        >
             <Card.Body>
                 <Card.Title>{title}</Card.Title>
                 <Card.Text>{description}</Card.Text>
