@@ -30,14 +30,17 @@ function App() {
     handleClose();
   }
   const handleTaskTitleChange = (event) => {
+    // add code for character limit
     setNewTaskTitle(event.target.value);
   }
   const handleTaskDescriptionChange = (event) => {
+    // add code for character limit
     setNewTaskDescription(event.target.value);
   }
-  const deleteTask = (index) => {
+  const deleteTask = (taskId) => {
     const taskArray = [...tasks];
-    taskArray.splice(index, 1);
+    const taskIndex = taskArray.findIndex(t => t.id == taskId);
+    taskArray.splice(taskIndex, 1);
     setTasks(taskArray);
   }
   const clearForm = () => {
@@ -46,21 +49,15 @@ function App() {
   }
   const handleDrop = (e, newStatus) => {
     e.preventDefault();
-    // get the task info from dataTransfer object
-    // change the task status of the specific task in the tasks array
-    // receive the index of the dragged task
-    // edit the task at that index, set the state
-    const taskIndex = e.dataTransfer.getData('taskIndex');
+    const taskId = e.dataTransfer.getData('taskId');
     const taskArray = [...tasks];
+    const taskIndex = taskArray.findIndex(t => t.id == taskId);
     taskArray[taskIndex].status = newStatus;
     setTasks(taskArray);
-    e.dataTransfer.clearData('taskIndex');
+    e.dataTransfer.clearData('taskId');
   }
   const generateId = () => {
-    // JUST ADDED THIS ID
-    // remove all uses of index and switch the functionality and your drag n drop will be fixed
     const num = Math.floor(Math.random() * Math.random() * Date.now());
-    console.log('unique id', num);
     return num;
   }
 
@@ -81,10 +78,10 @@ function App() {
             <Card.Text>
               {
                 tasks.filter((task) => task.status == 'planned')
-                  .map((task, index) => (
+                  .map((task) => (
                     <Task
-                      key={index}
-                      index={index}
+                      key={task.id}
+                      id={task.id}
                       title={task.title}
                       description={task.description}
                       status={task.status}
@@ -98,17 +95,17 @@ function App() {
         <Card
           className='tasks-container'
           onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => handleDrop(e, 'in progress')}
+          onDrop={(e) => handleDrop(e, 'in-progress')}
         >
           <Card.Body>
             <Card.Title>In Progress</Card.Title>
             <Card.Text>
               {
-                tasks.filter((task) => task.status == 'in progress')
-                  .map((task, index) => (
+                tasks.filter((task) => task.status == 'in-progress')
+                  .map((task) => (
                     <Task
-                      key={index}
-                      index={index}
+                      key={task.id}
+                      id={task.id}
                       title={task.title}
                       description={task.description}
                       status={task.status}
@@ -129,10 +126,10 @@ function App() {
             <Card.Text>
               {
                 tasks.filter((task) => task.status == 'completed')
-                  .map((task, index) => (
+                  .map((task) => (
                     <Task
-                      key={index}
-                      index={index}
+                      key={task.id}
+                      id={task.id}
                       title={task.title}
                       description={task.description}
                       status={task.status}
@@ -154,20 +151,29 @@ function App() {
             <Form.Group className='mb-3'>
               <Form.Label>Title</Form.Label>
               <Form.Control
+                autoFocus
                 placeholder='Enter task title'
+                maxLength={50}
                 required
                 value={newTaskTitle}
                 onChange={handleTaskTitleChange}
               />
+              <Form.Text>
+                Remaining characters: {50 - newTaskTitle.length}
+              </Form.Text>
             </Form.Group>
             <Form.Group>
               <Form.Label>Description</Form.Label>
               <Form.Control
                 as='textarea'
                 placeholder='Optionally include a description'
+                maxLength={150}
                 value={newTaskDescription}
                 onChange={handleTaskDescriptionChange}
               />
+              <Form.Text>
+                Remaining characters: {150 - newTaskDescription.length}
+              </Form.Text>
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>

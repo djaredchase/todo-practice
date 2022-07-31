@@ -1,15 +1,14 @@
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 
 const Task = (props) => {
-    const { index, title, description, status, deleteTask } = props;
+    const { id, title, description, status, deleteTask } = props;
 
     const setBackgroundColor = (status) => {
         switch (status) {
             case 'planned':
-                return 'secondary';
-            case 'in progress':
-                return 'primary';
+                return 'danger';
+            case 'in-progress':
+                return 'warning';
             case 'completed':
                 return 'success';
             default:
@@ -17,26 +16,27 @@ const Task = (props) => {
         }
     }
     const handleDragStart = (e) => {
-        // set the task index in the dataTransfer object
-        e.dataTransfer.setData('taskIndex', index);
+        e.dataTransfer.setData('taskId', id);
     }
 
     const handleDelete = () => {
-        deleteTask(index);
+        deleteTask(id);
     }
 
     return (
         <Card
-            bg={setBackgroundColor(status)}
-            text='white'
+            className='task'
+            border={setBackgroundColor(status)}
             draggable
             onDragStart={(e) => handleDragStart(e)}
         >
-            <Card.Body>
-                <Card.Title>{title}</Card.Title>
+            <Card.Header>
+                {title}
+                <button className='delete-button' onClick={handleDelete}>x</button>
+            </Card.Header>
+            {description && <Card.Body>
                 <Card.Text>{description}</Card.Text>
-                <Button variant='danger' onClick={handleDelete}>Delete</Button>
-            </Card.Body>
+            </Card.Body>}
         </Card>
     );
 }

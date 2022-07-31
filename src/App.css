@@ -1,6 +1,6 @@
 .App {
-  background-color: gray;
-  height: 100%; /*CHECK THIS HEIGHT*/
+  background-color: rgb(52, 175, 228);
+  min-height: 100vh;
   padding: 10px 20px;
 }
 
@@ -14,16 +14,31 @@
 }
 
 .my-container {
-  /* background-color: aliceblue; */
   display: flex;
   justify-content: space-around;
-  height: 100vh; /*CHECK THIS HEIGHT*/
+  align-items: flex-start;
 }
 
-.tasks-container {
-  width: 33%;
+.tasks-container.card {
+  background-color: lightgrey;
+  flex-grow: 1;
+  margin: 0 5px;
 }
 
 .task-title-input {
   margin: 0 0 10px 5px;
+}
+
+.task {
+  margin: 5px
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.delete-button {
+  background-color: transparent;
+  border: none;
 }
